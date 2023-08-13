@@ -225,15 +225,17 @@ string LinuxParser::Uid(int pid) {
   string line, key, value;
   std::ifstream stream(kProcDirectory + to_string(pid) + kStatusFilename);
   if(stream.is_open()){
-    std::getline(stream, line);
+    while(getline(stream, line)) {
     std::replace(line.begin(), line.end(), ':', ' ');
     std::istringstream linestream(line);
     linestream >> key >> value;
     if (key == "Uid") {
       return value;
+      }
     }
+  stream.close();
   }
-  return value;
+  return "";
  }
 
 
