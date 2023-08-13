@@ -212,7 +212,8 @@ string LinuxParser::Ram(int pid) {
       std::replace(line.begin(), line.end(), ':', ' ');
       std::istringstream linestream(line);
       linestream >> key >> value;
-      if(key == "VmSize"){
+      // VmSize replaced with VmRss as VmRss gives the exact physical memory used as a part of RAM
+      if(key == "VmRss"){
         valid_value = std::stoi(value);
       }
     }
@@ -239,13 +240,14 @@ string LinuxParser::Uid(int pid) {
 string LinuxParser::User(int pid) {
   string line;
   string username, str1, str2;
+  string uid = LinuxParser::Uid(pid);
   std::ifstream stream(kPasswordPath);
   if (stream.is_open()) {
     while(std::getline(stream, line)) {
     std::replace(line.begin(), line.end(), ':', ' ');
     std::istringstream linestream(line);
       while (linestream >> username >> str1 >> str2) {
-        if (str2 == to_string(pid)) {
+        if (str2 == uid) {
           return username;
         }
       }
