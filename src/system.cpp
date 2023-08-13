@@ -23,9 +23,9 @@ Processor& System::Cpu() { return cpu_; }
 // Return a container composed of the system's processes
 vector<Process>& System::Processes() { 
   vector<int> pids{LinuxParser::Pids()};
-  processes_.clear();
+
   set<int> current_pids;
-  for(Process const& process: processes_){
+  for(Process & process: processes_){
     current_pids.insert(process.Pid());
   }
 
